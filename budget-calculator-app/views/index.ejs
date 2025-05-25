@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Budget Tracker</title>
+  <link rel="stylesheet" href="/stylesheets/index.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Budget Tracker</h1>
+
+    <div class="summary">
+      <div class="summary-box income">
+        <h2>Total Income</h2>
+        <p>$<%= totalIncome.toFixed(2) %></p>
+      </div>
+      <div class="summary-box expense">
+        <h2>Total Expense</h2>
+        <p>$<%= totalExpense.toFixed(2) %></p>
+      </div>
+      <div class="summary-box balance">
+        <h2>Balance</h2>
+        <p>$<%= balance.toFixed(2) %></p>
+      </div>
+    </div>
+
+    <div class="filter-container">
+      <form method="GET" action="/">
+        <label for="type">Filter by Type:</label>
+        <select name="type" onchange="this.form.submit()">
+          <option value="" <%= !typeFilter ? 'selected' : '' %>>All</option>
+          <option value="income" <%= typeFilter === 'income' ? 'selected' : '' %>>Income</option>
+          <option value="expense" <%= typeFilter === 'expense' ? 'selected' : '' %>>Expense</option>
+        </select>
+      </form>
+    </div>
+
+    <div class="add-entry-btn">
+      <a href="/add">Add Entry</a>
+    </div>
+
+    <ul class="entries-list">
+      <% items.forEach(item => { %>
+        <li class="entry">
+          <div class="entry-info">
+            <strong><%= item.title %></strong> - 
+            $<%= item.amount.toFixed(2) %> 
+            (<span class="<%= item.type %>"><%= item.type %></span>)
+          </div>
+          <div class="actions">
+            <form action="/delete" method="POST" style="display:inline;">
+              <input type="hidden" name="id" value="<%= item._id %>">
+              <button class="delete-btn" type="submit">Delete</button>
+            </form>
+            <a class="edit-btn" href="/edit?id=<%= item._id %>">Edit</a>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+</body>
+</html>
